@@ -1,0 +1,668 @@
+Toaster/
+
+div(
+  class='sm:grid sm:grid-cols-[auto,auto]'
+)
+  div(
+    class='bg-stone-100'
+    class='sm:h-screen sm:overflow-y-scroll'
+    class='p-6'
+    class='sm:grid sm:grid-cols-[auto,1fr]'
+    style='direction: rtl'
+  )
+    div(style='direction: ltr')
+      a(
+        href='/'
+        class='flex justify-center items-center h-16 mb-4 rounded-md'
+        class='hover:cursor-pointer hover:bg-white hover:shadow-sm'
+        data-sveltekit-reload
+      )
+        .logo(class='w-[48px] h-[48px]')
+
+      a(class='flex font-black mb-1' href='#start') Getting Started
+
+      NavLink(id='#start-about') About
+      NavLink(id='#start-install') Install
+      NavLink(id='#start-connect') Connect
+      NavLink(id='#start-define-a-model') Define a Model
+      NavLink(id='#start-create-a-record') Create a Record
+      NavLink(id='#start-save-a-record') Save a Record
+      NavLink(id='#start-run-a-query') Run a Query
+
+      div.pb-8
+
+      a(class='flex font-black' href='#api') API Reference
+
+      a(class='flex mt-1 font-medium' href='#api-access') Access
+      NavLinkNew(id='#api-access-new') Access
+      NavLinkFn(id='#api-access-screen') screen
+      NavLinkFn(id='#api-access-fields') fields
+
+      a(class='flex mt-3 font-medium' href='#api-adapter') Adapter
+      NavLinkFn(id='#api-adapter-connect') connect
+      NavLinkFn(id='#api-adapter-transact') transact
+
+      a(class='flex mt-3 font-medium' href='#api-model') Model
+      NavLinkNew(id='#api-model-new') Model
+      NavLinkFn(id='#api-model-count') count
+      NavLinkFn(id='#api-model-create') create
+      NavLinkFn(id='#api-model-find') find
+      NavLinkFn(id='#api-model-find-all') findAll
+      NavLinkFn(id='#api-model-fragment') fragment
+      NavLinkFn(id='#api-model-get') get
+      NavLinkFn(id='#api-model-get-all') getAll
+      NavLinkFn(id='#api-model-page') page
+
+      a(class='flex mt-3 font-medium' href='#api-pager') Pager
+      NavLinkNew(id='#api-pager-new') Pager
+
+      a(class='flex mt-3 font-medium' href='#api-query') Query
+      NavLinkNew(id='#api-query-new') Query
+
+      a(class='flex mt-3 font-medium' href='#api-record') Record
+      NavLinkFn(id='#api-record-obj') obj
+      NavLinkFn(id='#api-record-save') save
+
+      a(class='flex mt-3 font-medium' href='#api-serializer') Serializer
+      NavLinkNew(id='#api-serializer-new') Serializer
+      NavLinkFn(id='#api-serializer-from-db') fromDB
+      NavLinkFn(id='#api-serializer-to-db') toDB
+
+      a(class='flex mt-3 font-medium' href='#api-validator') Validator
+      NavLinkNew(id='#api-validator-new') Validator
+      NavLinkFn(id='#api-validator-extend') extend
+      NavLinkFn(id='#api-validator-errors') errors
+      NavLinkFn(id='#api-validator-ok') ok
+
+      div.pb-20
+    div
+
+  div(
+    class='sm:h-screen sm:overflow-y-scroll bg-stone-100'
+  )
+    div(class='max-w-[800px] p-6 bg-white border border-stone-200')
+      h1.font-normal.text-5xl.brand.pt-2
+        span Flame
+        span.text-base.font-mono.font-medium.text-stone-600.ml-4.relative.bottom-px v0.0.4-beta.18
+
+      #start.pb-4
+      h2.mb-2(class='font-black border border-stone-200 bg-stone-100 px-2 text-center py-2') Getting Started
+
+      #start-about.pb-8
+      h4.mb-2.font-bold About
+      p.mt-2.mb-2 Flame is a data model and query library for Firestore.
+      p.mt-2.mb-2 Firestore is a fully managed, scalable document database offered by Google. Flame was designed to improve clarity, performance, and accuracy of your Firestore-coupled data model and query code.
+      p.mt-2.mb-2 Among other features, Flame makes it easy to define models, write queries and transactions, and page data with cursor based paging. As a bonus, (compared to using firestore-admin directly) using Flame will greatly reduce the amount code in API endpoints and Lambda functions that interact with Firestore.
+      p.mt-2.mb-2 If you have any ± feedback, feature requests, or bug reports, please open an issue on Github.
+
+
+      #start-install.pb-8
+      h4.mb-2.font-bold Install
+      p.mt-2.mb-2
+        | Install{' '}
+        span.font-mono.text-md.bg-stone-200.rounded-sm.px-1 flame-odm
+        | {' '}using{' '}
+        span.font-mono.text-md.bg-stone-200.rounded-sm.px-1 yarn
+        |,{' '}
+        span.font-mono.text-md.bg-stone-200.rounded-sm.px-1 npm
+        |, or{' '}
+        span.font-mono.text-md.bg-stone-200.rounded-sm.px-1 pnpm
+        |.
+      p.mt-2.mb-2 At this time, Flame targets node.js and will not work in the browser.
+      p.mt-2.mb-2.italic.text-stone-600.font-light Note: Flame works alongside existing installations of firebase-admin in your project.
+      CodeBlock(
+        code_text='{code.start.install_0.code}'
+        code_copy='{code.start.install_0.copy}'
+      )
+
+      #start-connect.pb-8
+      h4.mb-2.font-bold Connect
+      p.mt-2.mb-2 The connection to Firestore is defined as part of the Adapter.
+      p.mt-2.mb-2.italic.text-stone-600.font-light
+        | Note: Flame doesn't immediately create a database connection. When queries are run, the Adapter lazily connects to Firestore as needed. If you'd prefer, you can deliberately connect by calling{' '}
+        a(
+          href='#api-adapter-connect'
+          class='font-mono text-md rounded-sm px-1 font-medium pointer-cursor'
+          class='bg-orange-100 hover:bg-orange-200'
+        ) Adapter.connect
+        | .
+      CodeBlock(
+        code_text='{code.start.connect_0.code}'
+        code_copy='{code.start.connect_0.code}'
+        file_path='/lib/flame/base/adapter.coffee'
+      )
+
+      #start-define-a-model.pb-8
+      h4.mb-2.font-bold Define a Model
+      p.mt-2.mb-2 Here we create our first model in two steps.
+      p.mt-2.mb-2 First, define your base model using the base adapter defined above.
+      CodeBlock(
+        code_text='{code.start.model_0.code}'
+        code_copy='{code.start.model_0.code}'
+        file_path='/lib/flame/base/model.coffee'
+      )
+      p.mt-2.mb-2 Second, we define our model by extending the base model.
+      CodeBlock(
+        code_text='{code.start.model_1.code}'
+        code_copy='{code.start.model_1.code}'
+        file_path='/lib/flame/models/user.coffee'
+      )
+
+      #start-create-a-record.pb-8
+      h4.mb-2.font-bold Create a Record
+      p.mt-2.mb-2 Create a user record using the User model.
+      CodeBlock(
+        code_text='{code.start.create_0.code}'
+        code_copy='{code.start.create_0.code}'
+        file_path='/some/project/file.coffee'
+      )
+
+      #start-save-a-record.pb-8
+      h4.mb-2.font-bold Save a Record
+      p.mt-2.mb-2 Saving a record is asynchronous.
+      CodeBlock(
+        code_text='{code.start.save_0.code}'
+        code_copy='{code.start.save_0.code}'
+        file_path='/some/project/file.coffee'
+      )
+
+
+      #start-run-a-query.pb-8
+      h4.mb-2.font-bold Run a Query
+      p.mt-2.mb-2 Use a Flame Query to make a query.
+      CodeBlock(
+        code_text='{code.start.query_0.code}'
+        code_copy='{code.start.query_0.code}'
+        file_path='/some/project/file.coffee'
+      )
+
+
+      #api
+      h2.mt-10.mb-2(class='font-black border border-stone-200 bg-stone-100 px-2 text-center py-2') API Reference
+
+      #api-access.pb-8
+      h4.mb-2.font-bold Access
+      #api-access-new.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.font-semibold.text-emerald-600 new{' '}
+        span.font-mono.font-normal Access(mask)
+      .px-4
+        p.mt-2.mb-2 Creat an Access instance that can be used to screen objects using a role-basd mask.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        .grid.ml-4(class='grid-cols-[auto,1fr]')
+          span.flex-1.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') mask (Object)
+          span.ml-2 An object that mirrors the structure of the target Model, where the value of each field is an array of roles allowed to access the given field.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Access)
+          span.ml-2 Returns the newly created Access instance
+          span .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.access.new.code}'
+          code_copy='{code.api.access.new.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+      #api-access-screen.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Access.
+        span.font-mono screen(obj, roles)
+      .px-4
+        p.mt-2.mb-2 Creates a copy of obj including only role-allowed fields.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') obj (Object)
+          span.ml-2 The object to be screened.
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') roles (Array)
+          span.ml-2 The roles used to determine allowed fields.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Object)
+          span.ml-2 Returns the new, screened object.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.access.screen.code}'
+          code_copy='{code.api.access.screen.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+      #api-access-fields.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Access.
+        span.font-mono fields(roles)
+      .px-4
+        p.mt-2.mb-2 Get the fields allowed by an Access instance, given one or more roles.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') roles (Array)
+          span.ml-2 The roles used to determine allowed fields.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Array)
+          span.ml-2 Returns an array of allowed fields.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.access.fields.code}'
+          code_copy='{code.api.access.fields.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+      #api-adapter.pb-8
+      h4.mb-2.font-bold Adapter
+
+      #api-adapter-connect.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Adapter.
+        span.font-mono connect()
+      .px-4
+        p.mt-2.mb-2 Connect to Firestore.
+        p.mt-2.mb-2.italic.text-stone-600.font-light Note: It is not necessary to invoke this function, it will be called automatically as needed.
+
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → undefined)
+          span.ml-2 Returns a Promise that resolves empty.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.adapter.connect.code}'
+          code_copy='{code.api.adapter.connect.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+      #api-adapter-transact.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Adapter.
+        span.font-mono transact(fn)
+      .px-4
+        p.mt-2.mb-2 Executes a set of database operations as a transaction.
+        p.mt-2.mb-2
+          | The function{' '}
+          span.font-mono(class='text-[0.9375rem]') fn
+          | {' '}is invoked with one argument:{' '}
+          span.font-mono(class='text-[0.9375rem]') T (Transaction)
+          | {' '}which should be passed to database operations carried out within the context of{' '}
+          span.font-mono(class='text-[0.9375rem]') Adatper.transact
+          | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') fn (Function)
+          span.ml-2 The function that wraps the read/write operations to be carried out.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → *)
+          span.ml-2 Returns the return value of{' '}
+          span.font-mono.bg-stone-200.rounded-sm.px-1(class='text-[0.9375rem]') fn
+          span .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.transact_0.code}'
+          code_copy='{code.api.transact_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+      //- #api-adapter-traverse.pb-8
+      //- h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+      //-   span.font-mono.text-stone-400.font-normal Adapter.
+      //-   span.font-mono
+      //-     | traverse(col, fn, max,{' '}
+      //-     span.italic query
+      //-     | )
+      //- .px-4
+      //-   p.mt-2.mb-2 Traverse all recrods in a collection that satisfy the provided query.
+      //-   p.mt-2.mb-2 Up to max fn invocations will occur in parallel during traversal.
+      //-   p.mt-2.mb-2 For example, in the code below 13 Alphabet records will be fetched, and fn will be invoked once with each record. If at any point in time, fewer than 13 fn invocations are still executing, more records will be fetched and fn will then be invoked for each of those additional records.
+      //-   p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+      //-   p.ml-4
+      //-     span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') col (String)
+      //-     span.ml-2 The collection to traverse.
+      //-   p.ml-4
+      //-     span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') fn (Function)
+      //-     span.ml-2 The function invoked with each record traversed.
+      //-   p.ml-4
+      //-     span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') max (Integer)
+      //-     span.ml-2 Maximum number of fn invocations to run in parallel.
+      //-   p.ml-4
+      //-     span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') query (Query)
+      //-     span.mx-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+      //-     | The Query to use.
+      //-   p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+      //-   p.ml-4
+      //-     span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') undefined
+      //-   p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+      //-   CodeBlock(
+      //-     code_text='{code.api.traverse_0.code}'
+      //-     code_copy='{code.api.traverse_0.code}'
+      //-     file_path='/some/project/file.coffee'
+      //-   )
+
+      #api-model.pb-8
+      h4.mb-2.font-bold Model
+
+      #api-count.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Model.
+        span.font-mono
+          | count(query,{' '}
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Count the number of records in a collection that satisfy{' '}
+          span.font-mono(class='text-[0.9375rem]') query
+          | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') query (Query)
+          span.ml-2 The Query to use.
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') count
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → number|null)
+          span.ml-2 Returns the return the number of records that match, or null if the query fails.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.count_0.code}'
+          code_copy='{code.api.count_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+      #api-find.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Model.
+        span.font-mono
+          | find(query,{' '}
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Find the first record in a collection that satisfies{' '}
+          span.font-mono(class='text-[0.9375rem]') query
+          | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') query (Query)
+          span.ml-2 The Query to use.
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') find
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Object|null)
+          span.ml-2 Returns the return the record, or null if there is no match.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.find_0.code}'
+          code_copy='{code.api.find_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+
+      #api-find-all.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Model.
+        span.font-mono
+          | findAll(query,{' '}
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Find the all records in a collection that satisfy{' '}
+          span.font-mono(class='text-[0.9375rem]') query
+          | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') query (Query)
+          span.ml-2 The Query to use.
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') findAll
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Array|null)
+          span.ml-2 Returns an array of matching records, or null if there are no matches.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.find_all_0.code}'
+          code_copy='{code.api.find_all_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+      #api-get.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Model.
+        span.font-mono
+          | get(id,{' '}
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Get a single record from a collection.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') id (String)
+          span.ml-2 The id of the record.
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') get
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Object|null)
+          span.ml-2 Returns the record, or null if there is no record with the given id.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.get_0.code}'
+          code_copy='{code.api.get_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+      #api-get-all.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Model.
+        span.font-mono
+          | getAll(ids,{' '}
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Get multiple records from a collection.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') ids (Array&lt;String&gt;)
+          span.ml-2 The ids of the records.
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') getAll
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Array&lt;Object&gt;|null)
+          span.ml-2 Returns an array of records, or null if there are no records for the given ids.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.get_all_0.code}'
+          code_copy='{code.api.get_all_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+      #api-adapter-page.pb-8
+      h4.mb-2.font-bold#api-page Page
+      p.mt-2.mb-2 Get a selected page of results from a collection that satisfy a query.
+
+
+      #api-record.pb-8
+      h4.mb-2.font-bold Record
+
+      #api-obj.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Record.
+        span.font-mono obj()
+      .px-4
+        p.mt-2.mb-2
+          | Converts a{' '}
+          span.font-mono(class='text-[0.9375rem]') Record
+          | {' '}into a plain JavaScript object.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.italic No Arguments
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Object)
+          span.ml-2 Returns the record as a plain JavaScript object.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.obj_0.code}'
+          code_copy='{code.api.obj_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+      #api-save.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Record.
+        span.font-mono
+          | save(
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Insert a new record into a collection in Firestore.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') save
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Boolean)
+          span.ml-2 Returns true when successful, otherwise false.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.save_0.code}'
+          code_copy='{code.api.save_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+      #api-fragment.pb-8
+      h4.mb-2.font-bold Fragment
+
+
+      #api-delete.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Fragment.
+        span.font-mono
+          | delete(
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Delete an existing record from a collection in Firestore.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') delete
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Boolean)
+          span.ml-2 Returns true when successful, otherwise false.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.delete_0.code}'
+          code_copy='{code.api.delete_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+      #api-update.pb-8
+      h4.mb-2.font-semibold.border.border-orange-200.bg-orange-50.px-4.py-2
+        span.font-mono.text-stone-400.font-normal Fragment.
+        span.font-mono
+          | update(
+          span.italic T
+          | )
+      .px-4
+        p.mt-2.mb-2
+          | Update an existing record in a collection in Firestore.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Arguments
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]')
+            | T (Transaction)
+          span.ml-2
+            span.mr-2.text-stone-400.uppercase(class='text-[0.75rem]') Optional{' '}
+            | The Transaction object used when invoking
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') update
+            | within the context of{' '}
+            span.font-mono.rounded-sm.px-1(class='text-[0.9375rem]') Adapter.transact
+            | .
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Returns
+        p.ml-4
+          span.font-mono.text-purple-600.rounded-sm.px-1(class='text-[0.9375rem]') value (Promise → Boolean)
+          span.ml-2 Returns true when successful, otherwise false.
+        p.mt-8.mb-1.font-medium.uppercase(class='text-[0.8125rem]') Example
+        CodeBlock(
+          code_text='{code.api.update_0.code}'
+          code_copy='{code.api.update_0.code}'
+          file_path='/some/project/file.coffee'
+        )
+
+
+
+
+
+
+  div

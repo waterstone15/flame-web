@@ -1,2 +1,3 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script src="./index/script.coffee"></script>
+<style src="./index/style.styl"></style>
+<template src="./index/template.pug"></template>

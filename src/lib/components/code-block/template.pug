@@ -1,0 +1,24 @@
+.flex.flex-col.bg-white.shadow-sm.border.border-neutral-600.rounded-md.overflow-hidden.text-sm
+  .flex.flex-row.justify-between.border-b.border-neutral-500.font-semibold(class='h-[36px] bg-neutral-700 text-neutral-300')
+    +if('file_path')
+      p.inline-flex.items-center(class='px-2 py-1.5')
+        Fa(fw icon='{faFolder}' scale='{1.1}')/
+        span.font-mono(class='ml-[1px]') {file_path}
+    +if('!file_path')
+      p.inline-flex.items-center(class='px-2 py-2')
+        span.inline-flex.justify-center.items-center.bg-neutral-300.text-black.rounded(class='px-[4px] py-[4px]')
+          Fa(fw icon='{faTerminal}' size='xs' scale='{.8}')/
+  button(
+    role='button'
+    use:copy='{code_copy}'
+    class='relative rounded group text-left'
+    on:click='{copyToast}'
+  )
+    .flex
+      Highlight(class='w-full' language='{coffeescript}' code='{code_text}')/
+    .absolute.right-0.top-0.bottom-0.left-0.border.border-dashed.border-neutral-900(
+      class='group-hover:border-amber-600 group-hover:cursor-pointer'
+      class='flex justify-end rounded m-1.5'
+    )
+      .p-1
+        Fa(fw icon='{faCopy}' class='text-amber-700 group-hover:text-amber-600')/
