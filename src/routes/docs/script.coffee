@@ -1,99 +1,86 @@
-import CodeBlock   from '$lib/components/code-block/+component.svelte'
-import Fa          from 'svelte-fa/src/fa.svelte'
-import NavLink     from '$lib/components/nav-link/+component.svelte'
-import NavLinkFn   from '$lib/components/nav-link-fn/+component.svelte'
-import NavLinkNew  from '$lib/components/nav-link-new/+component.svelte'
-import { Toaster } from 'svelte-french-toast'
+import CodeBlock                 from '$lib/components/code-block/+component.svelte'
+import Fa                        from 'svelte-fa/src/fa.svelte'
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { Toaster }               from 'svelte-french-toast'
 
 code =
   start:
-    install_0:
-      code: """
-        λ yarn add flame-odm
+    install:
+      yarn:
+        text: """
+          λ yarn add flame-odm
+          """
+        copy: """
+          yarn add flame-odm
+          """
+    connect:
+      coffee:
+        text: """
+          Adapter = require 'flame-odm/adapter'
+
+          service_account = {
+            type: "service_account"
+            project_id: "..."
+            # ...
+          }
+
+          adapter = new Adapter(service_account)
         """
-      copy: """
-        yarn add flame-odm
+    define_model:
+      coffee:
+        text: """
+          # (cont.)
+
+          Model   = require 'flame-odm/model'
+          rand    = require '@stablelib/random'
+
+          User = new Model('User', {
+            id:    -> 'user-' + rand.randomString(32)
+            name:  null
+            email: null
+          }), Adapter)
         """
-    connect_0:
-      code: """
-        Adapter = require 'flame-odm/adapter'
+    create_record:
+      coffee:
+        text: """
+          # (cont.)
 
-        service_account = {
-          type: "service_account"
-          project_id: "..."
-          # ...
-        }
+          record = User.create({
+            name: 'Dragon'
+          })
 
-        A = new Adapter(service_account)
-
-        module.exports = A
+          console.log(record.obj())
+          # => {
+          #   id: 'user-KXKstn9KZZqhuW9MKJFEb7qggEVbeVFR'
+          #   name: 'Dragon'
+          #   email: null
+          # }
         """
-    adapter_0:
-      code: """
-        Adapter = require 'flame-odm/adapter'
-        Secrets = require '<secrets-lib>'
-
-        A = new Adapter((->
-          secrets = await Secrets()
-          return JSON.parse(secrets.SERVICE_ACCOUNT)
-        ))
-
-        module.exports = A
+    save_record:
+      coffee:
+        text: """
+          # (cont.)
+          saved = await record.save()
+          console.log(saved)
+          # => true
         """
-    model_0:
-      code: """
-        Adapter = require '◆/lib/flame/base/adapter.coffee'
-        Model   = require 'flame-odm/model'
+    run_query:
+      coffee:
+        text: """
+          # (cont.)
+          Query = require 'flame-odm/query'
 
-        M = new Model('default', {}, Adapter)
+          userQ = new Query([
+            [ 'eq', 'name', 'Dragon' ]
+          ])
 
-        module.exports = M
-        """
-    model_1:
-      code: """
-        Model  = require '◆/lib/flame/base/model.coffee'
-
-        M = Model.extend('User', {
-          id:    (-> Math.random().toString(36).slice(2, 6))
-          name:  null
-          email: null
-        })
-
-        module.exports = M
-        """
-    create_0:
-      code: """
-        User = require '◆/lib/flame/models/user.coffee'
-
-        record = User.create({
-          name: 'Dragon'
-        })
-
-        console.log(record.obj())
-        # => { id: 'kbB4', name: 'Dragon', email: null }
-
-        # ...
-        """
-    save_0:
-      code: """
-        # ...
-
-        saved = await record.save()
-        console.log(saved)
-        # => true
-        """
-    query_0:
-      code: """
-        User = require '◆/lib/flame/models/user.coffee'
-        Query = require 'flame-odm/query'
-
-        userQ = new Query([
-          [ 'eq', 'name', 'Dragon' ]
-        ])
-
-        user = await User.find(userQ)
-        console.log(user)
-        # => { id: 'kbB4', name: 'Dragon', email: null }
+          user = await User.find(userQ)
+          console.log user
+          # => {
+          #   id: 'user-KXKstn9KZZqhuW9MKJFEb7qggEVbeVFR'
+          #   name: 'Dragon'
+          #   email: null
+          # }
         """
   api:
     access:
@@ -133,6 +120,19 @@ code =
 
         """
     adapter:
+      'new':
+        coffee:
+          text: """
+            Adapter = require 'flame-odm/adapter'
+
+            service_account = {
+              type: "service_account"
+              project_id: "..."
+              # ...
+            }
+
+            adapter = new Adapter(service_account)
+          """
       connect:
         code: """
           Adapter = require 'flame-odm/adapter'
@@ -147,149 +147,443 @@ code =
 
           await adapter.connect()
         """
-    transact_0:
-      code: """
-        Adapter  = require 'flame-odm/adapter'
-        Alphabet = require '◆/lib/flame/models/alphabet.coffee'
-        Query    = require 'flame-odm/query'
+      transact:
+        code: """
+          Adapter  = require 'flame-odm/adapter'
+          Alphabet = require '◆/lib/flame/models/alphabet.coffee'
+          Query    = require 'flame-odm/query'
 
-        aQ = new Query([
-          [ 'eq', 'letter', 'a' ]
-        ])
+          alphabet_query = new Query([
+            [ 'eq', 'letter', 'a' ]
+          ])
 
-        ok = await Adapter.transact((T) ->
-          a = await Alphabet.find(aQ, T)
+          ok = await Adapter.transact((T) ->
+            letter_a = await Alphabet.find(alphabet_query, T)
 
-          if !a
-            a2 = Alphabet.create({ letter: 'a' })
-            saved = await a2.save(T)
+            if !letter_a
+              leter_a2 = Alphabet.create({ letter: 'a' })
+              saved = await letter_a2.save(T)
 
-          return (!!a || saved)
-        )
+            return (!!letter_a || saved)
+          )
 
-        console.log(ok)
-        # => true
-        """
-    traverse_0:
-      code: """
-        Adapter  = require 'flame-odm/adapter'
-        Alphabet = require '◆/lib/flame/models/alphabet.coffee'
-        Query    = require 'flame-odm/query'
+          console.log(ok)
+          # => true
+          """
+    config:
+      'new':
+        coffee:
+          text: """
+            Config = require 'flame-odm/config'
+            Model  = require 'flame-odm/model'
+            rand   = require '@stablelib/random'
 
-        alphaQ = new Query([
-          [ 'order-by', 'letter' ]
-        ])
+            config = new Config({
+              id_field: 'id'
+            })
 
-        delay = (ms -> new Promise(res -> setTimeout(res, ms)))
+            User = new Model('User', {
+              id: -> 'user-' + rand.randomString(32)
+            }, config)
+            # The id field of each User model will now be used as its Document ID Firestore.
+          """
+    model:
+      'new':
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
 
-        await Adapter.traverse('alphabet', ((obj) ->
-          await delay(Math.round((Math.random() * 1000)))
-          process.stdout.write(obj.letter + ' ')
-          return
-        ), 13, alphaQ)
+            User = new Model('User', {
+              id:   null
+              name: null
+            })
+          """
+      count:
+        coffee:
+          text: """
+            map   = require 'lodash/map'
+            split = require 'lodash/split'
 
-        # => h w i d g q y m f o n z b j v a r k x c u l t e p s
-        """
-    count_0:
-      code: """
-        Alphabet = require '◆/lib/flame/models/alphabet.coffee'
-        Query    = require 'flame-odm/query'
+            Model = require 'flame-odm/model'
+            Query = require 'flame-odm/query'
 
-        alphaQ = new Query([
-          [ 'gt', 'letter', 'w' ]
-        ])
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
 
-        total = await Alphabet.count(alphaQ)
-        # => 3
-        """
-    delete_0:
-      code: """
-        Thing = require '◆/lib/flame/models/thing.coffee'
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
 
-        success = await Thing.del('id')
-        # => true
-        """
-    find_0:
-      code: """
-        Country = require '◆/lib/flame/models/country.coffee'
-        Query   = require 'flame-odm/query'
+            query = new Query([
+              [ 'gt',  'letter', 'b' ]
+              [ 'lte', 'letter', 'f' ]
+            ])
 
-        countryQ = new Query([
-          [ 'eq', 'capital', 'Washington D.C.' ]
-        ])
+            cdef = await Alphabet.count(query)
+            # => 4
+          """
+      create:
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
 
-        country = await Country.find(countryQ)
-        # => { name: 'United States', capital: 'Washington D.C.' }
-        """
-    find_all_0:
-      code: """
-        Alphabet = require '◆/lib/flame/models/alphabet.coffee'
-        Query    = require 'flame-odm/query'
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
 
-        alphaQ = new Query([
-          [ 'gt', 'letter', 'w' ]
-        ])
+            record = Alphabet.create({ letter: 'a' })
+            # => (Record)
+          """
+      extend:
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
 
-        letters = await Alphabet.findAll(alphaQ)
-        # => [{ letter: 'x' }, { letter: 'y' }, { letter: 'z' }]
-        """
-    get_0:
-      code: """
-        Thing = require '◆/lib/flame/models/thing.coffee'
+            Vehicle = new Model('Vehicle', {
+              weight: null
+            })
 
-        thing = await Thing.get('1')
-        # => { id: '1' }
-        """
-    get_all_0:
-      code: """
-        Thing = require '◆/lib/flame/models/thing.coffee'
+            Car = Vehicle.extend('Car', {
+              wheels: 4
+            })
+          """
+      find:
+        coffee:
+          text: """
+            map   = require 'lodash/map'
+            split = require 'lodash/split'
 
-        things = await Thing.getAll([ '1', '2', '3' ])
-        # => [{ id: '1' }, { id: '2' }, { id: '3' }]
-        """
-    save_0:
-      code: """
-        User = require '◆/lib/flame/models/user.coffee'
+            Model = require 'flame-odm/model'
+            Query = require 'flame-odm/query'
 
-        record = User.create({
-          name: 'Turtle'
-        })
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
 
-        await record.save()
-        # => true
-        """
-    update_0:
-      code: """
-        User = require '◆/lib/flame/models/user.coffee'
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
 
-        record = User.fragment('1', {
-          name: 'Snapping Turtle'
-        })
+            query = new Query([
+              [ 'gt',  'letter', 'b' ]
+            ])
 
-        await record.update()
-        # => true
-        """
-    delete_0:
-      code: """
-        User = require '◆/lib/flame/models/user.coffee'
+            c = await Alphabet.find(query)
+            # => { letter: 'c' }
+          """
+      find_all:
+        coffee:
+          text: """
+            map   = require 'lodash/map'
+            split = require 'lodash/split'
 
-        record = User.fragment('1')
+            Model = require 'flame-odm/model'
+            Query = require 'flame-odm/query'
 
-        await record.del()
-        # => true
-        """
-    obj_0:
-      code: """
-        User = require '◆/lib/flame/models/user.coffee'
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
 
-        record = User.create({
-          name: 'Object'
-        })
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
 
-        console.log(record.obj())
-        # => { id: 'kxC2', name: 'Object', email: null }
+            query = new Query([
+              [ 'eq-any', 'letter', [ 'a', 'e', 'i', 'o', 'u', 'y' ]]
+            ])
 
-        # ...
-        """
+            vowels = await Alphabet.findAll(query)
+            # => [{ letter: 'a' }, { letter: 'e' }, { letter: 'i' }, { letter: 'o' }, { letter: 'u' }, { letter: 'y' }]
+          """
+      fragment:
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
+            rand  = require '@stablelib/random'
 
+            User = new Model('User', {
+              id:   -> 'user-' + rand.randomString(4)
+              name: null
+              bday: null
+            })
 
+            record = User.create({
+              name: 'Ella'
+            })
+            await record.save()
+
+            record_v2 = User.fragment(record.obj().id, {
+              bday: '2020-02-02'
+            })
+            await record_v2.update([ 'bday' ])
+            # => true
+          """
+      get:
+        coffee:
+          text: """
+            map   = require 'lodash/map'
+            split = require 'lodash/split'
+
+            Config = require 'flame-odm/config'
+            Model  = require 'flame-odm/model'
+            Query  = require 'flame-odm/query'
+
+            C = new Config({
+              id_field: 'letter'
+            })
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            }, C)
+
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
+
+            a = await Alphabet.get('a')
+            # => { letter: 'a' }
+          """
+      get_all:
+        coffee:
+          text: """
+            map   = require 'lodash/map'
+            split = require 'lodash/split'
+
+            Config = require 'flame-odm/config'
+            Model  = require 'flame-odm/model'
+            Query  = require 'flame-odm/query'
+
+            C = new Config({
+              id_field: 'letter'
+            })
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            }, C)
+
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
+
+            a = await Alphabet.getAll([ 'a', 't', 'z' ])
+            # => [{ letter: 'a' }, { letter: 't' }, { letter: 'z' }]
+          """
+      page:
+        coffee:
+          text: """
+            map   = require 'lodash/map'
+            split = require 'lodash/split'
+
+            Config = require 'flame-odm/config'
+            Model  = require 'flame-odm/model'
+            Pager  = require 'flame-odm/pager'
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
+
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
+
+            pager = (new Pager [
+              [ 'order-by', 'letter', 'asc' ]
+            ], { size: 4 })
+
+            cursor = {
+              obj: { letter: 'd' }
+              position: 'page-start'
+            }
+
+            page = await Alphabet.page(pager, cursor)
+            # => {
+            #   counts: { total: 26, before: 3, page: 4, after: 19 },
+            #   collection: {
+            #     first: { letter: 'a', },
+            #     last: { letter: 'z', }
+            #   },
+            #   page: {
+            #     first: { letter: 'd'},
+            #     items: [
+            #       { letter: 'd', },
+            #       { letter: 'e', },
+            #       { letter: 'f', },
+            #       { letter: 'g', }
+            #     ],
+            #     last: { letter: 'g', }
+            #   },
+            #   cursors: {
+            #     previous: {
+            #       obj: { letter: 'c', },
+            #       position: 'page-end'
+            #     },
+            #     current: {
+            #       obj: { letter: 'd' },
+            #       position: 'page-start'
+            #     },
+            #     next: {
+            #       obj: { letter: 'h' },
+            #       position: 'page-start'
+            #     }
+            #   }
+            # }
+          """
+    pager:
+      'new':
+        coffee:
+          text: """
+            Pager  = require 'flame-odm/pager'
+
+            pager = new Pager([
+              [ 'gt',       'letter', 'f' ]
+              [ 'order-by', 'letter', 'asc' ]
+            ], { size: 6 })
+          """
+    query:
+      'new':
+        coffee:
+          text: """
+            Query  = require 'flame-odm/query'
+
+            query = new Query([
+              [ 'gte',    'letter', 'm' ]
+              [ 'eq-any', 'letter', [ 'a', 'e', 'i', 'o', 'u', 'y', ]]
+            ])
+          """
+    record:
+      destroy:
+        coffee:
+          text: """
+            map    = require 'lodash/map'
+            split  = require 'lodash/split'
+
+            Config = require 'flame-odm/model'
+            Model  = require 'flame-odm/config'
+
+            config = new Config({
+              id_field: 'letter'
+            })
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
+
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
+
+            record = Model.fragment('a')
+            await record.destroy()
+            # => true
+          """
+      errors:
+        coffee:
+          text: """
+            Model     = require 'flame-odm/config'
+            Validator = require 'flame-odm/validator'
+
+            validator = new Validator({
+              letter: (value, object) -> /^[a-z]+$/.test(value)
+            })
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            }, validator)
+
+            record = Model.create({ letter: 10 })
+            errors = record.errors()
+            # => { letter: true }
+          """
+      obj:
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
+
+            record = Record.create({ letter: 'z' })
+            record.obj()
+            # => { letter: 'z' }
+          """
+      ok:
+        coffee:
+          text: """
+            Model     = require 'flame-odm/config'
+            Validator = require 'flame-odm/validator'
+
+            validator = new Validator({
+              letter: (value, object) -> /^[a-z]+$/.test(value)
+            })
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            }, validator)
+
+            record = Model.create({ letter: 10 })
+            ok = record.ok()
+            # => false
+          """
+      save:
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
+
+            record = Record.create({ letter: 'm' })
+            await record.save()
+            # => true
+          """
+      update:
+        coffee:
+          text: """
+            Model = require 'flame-odm/model'
+            rand  = require '@stablelib/random'
+
+            User = new Model('User', {
+              id:   -> 'user-' + rand.randomString(4)
+              name: null
+              bday: null
+            })
+
+            record = User.create({
+              name: 'Billy'
+            })
+            await record.save()
+
+            record_v2 = User.fragment(record.obj().id, {
+              bday: '2011-11-02'
+            })
+            await record_v2.update([ 'bday' ])
+            # => true
+          """
+    serializer:
+      'new':
+        coffee:
+          text: """
+            Serializer = require 'flame-odm/serializer'
+
+            serializer = new Serializer({
+              prefixes: [ 'ext', 'index', 'meta', 'rel', 'val' ]
+              separator: '-'
+              fmt: {
+                field: {
+                  db:    'kebab'
+                  plain: 'snake'
+                }
+              }
+            })
+          """
+    validator:
+      'new':
+        coffee:
+          text: """
+            Model     = require 'flame-odm/model'
+            Validator = require 'flame-odm/validator'
+
+            validator = new Validator({
+              letter: (value, object) -> /^[a-z]+$/.test(value)
+            })
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            }, validator)
+          """

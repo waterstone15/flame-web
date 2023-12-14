@@ -3,9 +3,15 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"s": "vite dev --clearScreen false",
 		"build": "vite build",
-		"preview": "vite preview"
+		"dev": "vite dev --clearScreen false --port 8007 --host",
+		"preview": "vite preview --port 8007",
+		"s": "yarn dev",
+		"build:copy": "cp -R ./.vercel ./build && cp vercel.json ./build",
+		"build:prod": "run-s build build:copy",
+		"s:prod": "yarn build:prod && vc dev --listen 8007",
+		"deploy": "yarn build:prod && cd ./build && vc",
+		"deploy:prod": "yarn build:prod && cd ./build && vc --prod"
 	},
 	"devDependencies": {
 		"@fortawesome/free-brands-svg-icons": "^6.4.0",
@@ -19,6 +25,7 @@
 		"@tailwindcss/typography": "^0.5.9",
 		"autoprefixer": "^10.4.14",
 		"coffeescript": "^2.7.0",
+		"npm-run-all": "^4.1.5",
 		"postcss": "^8.4.26",
 		"pug": "^3.0.2",
 		"serve": "^14.2.0",
@@ -26,7 +33,7 @@
 		"svelte": "^4.0.5",
 		"svelte-copy": "^1.4.1",
 		"svelte-fa": "^3.0.4",
-		"svelte-french-toast": "^1.1.0",
+		"svelte-french-toast": "^1.2.0",
 		"svelte-highlight": "^7.3.0",
 		"svelte-preprocess": "^5.0.4",
 		"tailwindcss": "^3.3.3",
