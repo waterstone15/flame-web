@@ -169,7 +169,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
         span.
           Flame
         span.text-base.font-mono.font-medium.text-stone-600.ml-4.relative.bottom-px.
-          v0.5.0-beta.1
+          v0.6.0
 
       #start.pb-4
       h2(class='font-black border border-stone-200 bg-stone-100 px-2 text-center py-2').
@@ -388,14 +388,16 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
           Parameters
         dl
           dt.
-            service_account (Object|String) #[span.optional Optional]
+            service_account (Function|Object|String) #[span.optional Optional]
           dd
+            p.
+              When #[code service_account] is #[code 'firebase-function'] or #[code 'google-cloud'] the service account will be retrieved automatically from the respective platform.
             p.
               When #[code service_account] is #[code 'process-env'] Flame will look for the service account as a JSON string stored at #[code process.env.FB_SERVICE_ACCOUNT].
             p.
               When #[code service_account] is an #[code Object], Flame assumes the #[code Object] is the service account.
             p.
-              When #[code service_account] is #[code 'firebase-function'] or #[code 'google-cloud'] the service account will be retrieved automatically from the respective platform.
+              When #[code service_account] is a #[code Function], Flame will invoke #[code service_account()], which should return a #[code Promise] that resolves to a service account #[code Object].
             p.
               When unspecified, Flame will default to using #[code 'firebase-function'].
             p.note.
