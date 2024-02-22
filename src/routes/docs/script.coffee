@@ -423,6 +423,34 @@ code =
             #   }
             # }
           """
+      traverse:
+        coffee:
+          text: """
+            map    = require 'lodash/map'
+            repeat = require 'lodash/repeat'
+            split  = require 'lodash/split'
+
+            Config = require 'flame-odm/config'
+            Model  = require 'flame-odm/model'
+            Pager  = require 'flame-odm/pager'
+
+            Alphabet = new Model('Alphabet', {
+              letter: null
+            })
+
+            letters = split('abcdefghijklmnopqrstuvwxyz')
+            await all(map(letters, (letter) -> Alphabet.create({ letter }).save()))
+
+            pager = (new Pager [
+              [ 'order-by', 'letter', 'asc' ]
+            ], { size: 6 })
+
+            await Alphabet.traverse(pager, ((record) ->
+              await Alphabet.create({ letter: repeat(record.letter, 2) }).save()
+              return
+            ))
+            # The 'alphabet' collection will now have records with with { letter: 'a' }, { letter: 'aa' }, { letter: 'b' }, { letter: 'bb' }, ...
+          """
     pager:
       'new':
         coffee:
