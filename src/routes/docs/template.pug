@@ -171,7 +171,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
         span.
           Flame
         span.text-base.font-mono.font-medium.text-stone-600.ml-4.relative.bottom-px.
-          v0.7.0
+          v0.10.0
 
       #start.pb-4
       h2(class='font-black border border-stone-200 bg-stone-100 px-2 text-center py-2').
@@ -979,6 +979,12 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
                     th.px-2.py-1.border.border-stone-200.font-medium.text-left(colspan='3') Constraint Tuples
                 tbody.bg-white
                   tr
+                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'and']
+                    td.px-2.py-1.border.border-stone-200(colspan='2') #[code.text-purple-900 One or more 'and', 'or, 'eq', 'eq-any', 'gt', 'gte', 'includes', 'includes-any', 'lt', 'lte', 'not-eq', 'not-eq-any' constraint tuples.]
+                  tr
+                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'or']
+                    td.px-2.py-1.border.border-stone-200(colspan='2') #[code.text-purple-900 One or more 'and', 'or, 'eq', 'eq-any', 'gt', 'gte', 'includes', 'includes-any', 'lt', 'lte', 'not-eq', 'not-eq-any' constraint tuples.]
+                  tr
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'eq']
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 field (String)]
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 value&nbsp;&nbsp;(Array|Boolean|Number|Null|Object|String)]
@@ -1021,7 +1027,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
                   tr
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'order-by']
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 field (String)]
-                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 values (Array&lt;String&gt;)]
+                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 value (String)]
 
           dt.
             opts (Object)
@@ -1073,6 +1079,12 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
                     th.px-2.py-1.border.border-stone-200.font-medium.text-left(colspan='3') Constraint Tuples
                 tbody.bg-white
                   tr
+                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'and']
+                    td.px-2.py-1.border.border-stone-200(colspan='2') #[code.text-purple-900 One or more 'and', 'or, 'eq', 'eq-any', 'gt', 'gte', 'includes', 'includes-any', 'lt', 'lte', 'not-eq', 'not-eq-any' constraint tuples.]
+                  tr
+                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'or']
+                    td.px-2.py-1.border.border-stone-200(colspan='2') #[code.text-purple-900 One or more 'and', 'or, 'eq', 'eq-any', 'gt', 'gte', 'includes', 'includes-any', 'lt', 'lte', 'not-eq', 'not-eq-any' constraint tuples.]
+                  tr
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'eq']
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 field (String)]
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 value&nbsp;&nbsp;(Array|Boolean|Number|Null|Object|String)]
@@ -1118,7 +1130,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
                   tr
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'order-by']
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 field (String)]
-                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 values (Array&lt;String&gt;)]
+                    td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-purple-900 value (String)]
                   tr
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap #[code.text-lime-600 'start-at']
                     td.px-2.py-1.border.border-stone-200.whitespace-nowrap(colspan='2') #[code.text-purple-900 value (Array&lt;Strings&gt;)]
