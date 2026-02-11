@@ -688,7 +688,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
         )
 
       #api-model-find.pb-8
-      h4 #[span.text-stone-400 Model].find(query, #[em T])
+      h4 #[span.text-stone-400 Model].find(query, #[em fields], #[em T])
       .px-4
         p.
           Retrieve the first document in a collection that satisfies #[code query].
@@ -700,6 +700,10 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
             query #[span.optional Optional]
           dd.
             The !{L('Query')} that determines what documents are elliglbe. If #[code query] is not specified, the first document in the collection is returned
+          dt.
+            fields (Array&lt;String&gt;) #[span.optional Optional]
+          dd.
+            The fields that should be included in the returned document.
           dt.
             T (Transaction) #[span.optional Optional]
           dd.
@@ -722,7 +726,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
         )
 
       #api-model-find-all.pb-8
-      h4 #[span.text-stone-400 Model].findAll(query, #[em T])
+      h4 #[span.text-stone-400 Model].findAll(query, #[em fields], #[em T])
       .px-4
         p.
           Retrieve all documents in a collection that satisfy #[code query].
@@ -734,6 +738,10 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
             query #[span.optional Optional]
           dd.
             The !{L('Query')} that determines what documents will be included. If #[code query] is not specified, all documents in the collection will be included.
+          dt.
+            fields (Array&lt;String&gt;) #[span.optional Optional]
+          dd.
+            The fields that should be included in the returned documents.
           dt.
             T (Transaction) #[span.optional Optional]
           dd.
@@ -794,7 +802,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
         )
 
       #api-model-get.pb-8
-      h4 #[span.text-stone-400 Model].get(id, #[em T])
+      h4 #[span.text-stone-400 Model].get(id, #[em fields], #[em T])
       .px-4
         p.
           Retrieve a single document from a collection.
@@ -806,6 +814,10 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
             id (String)
           dd.
             The document ID.
+          dt.
+            fields (Array&lt;String&gt;) #[span.optional Optional]
+          dd.
+            The fields that should be included in the returned document.
           dt.
             T (Transaction) #[span.optional Optional]
           dd.
@@ -828,7 +840,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
         )
 
       #api-model-get-all.pb-8
-      h4 #[span.text-stone-400 Model].getAll(ids, #[em T])
+      h4 #[span.text-stone-400 Model].getAll(ids, #[em fields], #[em T])
       .px-4
         p.
           Retreive multiple documents from a collection.
@@ -840,6 +852,10 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
             ids (Array&lt;String&gt;)
           dd.
             The document IDs of the documents to retrieve.
+          dt.
+            fields (Array&lt;String&gt;) #[span.optional Optional]
+          dd.
+            The fields that should be included in the returned documents.
           dt.
             T (Transaction) #[span.optional Optional]
           dd.
@@ -1196,7 +1212,9 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
           Parameters
         dl
           dt.
-            fields (Array) #[span.optional Optional]
+            fields (Array&lt;String&gt;) #[span.optional Optional]
+          dd.
+            The fields that should be included in the returned documents.
           dd.
             An #[code Array] of fields to validate. When unspecified or #[code Null], all fields are validated.
 
@@ -1308,7 +1326,7 @@ div(class='sm:grid sm:grid-cols-[auto,auto]')
           Parameters
         dl
           dt.
-            fields (Object)
+            fields (Array&lt;String&gt;)
           dd.
             The fields to update in this !{L('Record')}'s document in Firestore.
           dt.
